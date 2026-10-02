@@ -6,7 +6,133 @@
 <title>Dominó Azul</title>
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{margin:0;background:linear-gradient(180deg,#c9f1ff,#eafaff);color:#123047;font-family:system-ui,sans-serif;min-height:100dvh}#app{max-width:520px;margin:auto;min-height:100dvh;background:linear-gradient(180deg,#d9f6ff,#fff)}header{height:68px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center}.profile{display:flex;gap:9px;align-items:center}.avatar{width:43px;height:43px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#64d3ff,#168bd0);border:2px solid white;font-size:22px}.name{font-weight:900}.level{font-size:11px;color:#66899b}.coins{background:#fff;border:1px solid #9cddf5;border-radius:20px;padding:8px 12px;font-weight:900;color:#168bd0}.screen{display:none;min-height:calc(100dvh - 68px);padding-bottom:20px}.active{display:block}.hero{text-align:center;padding:22px 15px 20px}.logo{font-size:54px}.title{font-size:38px;font-weight:950}.sub{color:#6a8998;font-size:13px}.panel{margin:12px 15px;padding:15px;background:#fff;border:1px solid #a7e2f7;border-radius:17px;box-shadow:0 8px 25px #4ab6dc22}.primary,.btn{width:100%;border-radius:12px;padding:14px;font-weight:900;font-size:16px}.primary{border:0;background:linear-gradient(135deg,#5bd1ff,#168bd0);color:#fff}.btn{background:#eafaff;color:#17445d;border:1px solid #a9e1f5;margin-top:8px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:9px}.grid .btn{margin-top:0}.btn span{font-size:21px;display:block}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.stat{text-align:center;background:#eafaff;border-radius:10px;padding:9px}.stat b{font-size:17px}.stat small{display:block;font-size:9px;color:#7290a0}.bottom{display:flex;justify-content:space-around;padding:9px 10px 15px;color:#168bd0}.bottom div{text-align:center;font-size:11px}.bottom b{display:block;font-size:20px}h2{margin-top:5px}input{width:100%;padding:13px;border:1px solid #9bdcf4;border-radius:10px;margin:7px 0;font-size:16px}.back{background:#eafaff;color:#168bd0;border:1px solid #9bdcf4;padding:11px 15px;border-radius:10px;font-weight:800;margin-top:10px}.status{text-align:center;font-weight:800}.mp-status{padding:10px 12px;background:#eafaff;border:1px solid #a9e1f5;border-radius:10px;margin:8px 0;font-size:13px}.board{margin:10px 15px;height:280px;background:#b8eaff;border:2px solid #79cde9;border-radius:18px;display:flex;align-items:center;justify-content:center;overflow:auto}.chain{display:flex;gap:4px;min-width:max-content}.tile{width:43px;height:70px;background:#fff;color:#111;border-radius:6px;display:flex;flex-direction:column;box-shadow:0 2px 5px #0003;flex-shrink:0}.half{height:50%;position:relative;display:flex;align-items:center;justify-content:center}.half:first-child{border-bottom:1px solid #aaa}.dot{position:absolute;width:7px;height:7px;background:#111;border-radius:50%}.hand{display:flex;overflow:auto;gap:5px;padding:12px}.hand .tile{width:43px}.pieceWrap{flex-shrink:0}.selected{outline:3px solid #168bd0;transform:translateY(-8px)}.actions{display:flex;gap:7px;padding:0 15px}.actions button{flex:1;background:#168bd0;color:white;border:0;border-radius:10px;padding:12px;font-weight:900}.hint{text-align:center;color:#6a8998;font-size:12px;padding:5px 15px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:linear-gradient(180deg,#c9f1ff,#eafaff);color:#123047;font-family:system-ui,sans-serif;min-height:100dvh}
+#app{max-width:520px;margin:auto;min-height:100dvh;background:linear-gradient(180deg,#d9f6ff,#fff)}
+header{height:68px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center}
+.profile{display:flex;gap:9px;align-items:center}
+.avatar{width:43px;height:43px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#64d3ff,#168bd0);border:2px solid white;font-size:22px}
+.name{font-weight:900}
+.level{font-size:11px;color:#66899b}
+.coins{background:#fff;border:1px solid #9cddf5;border-radius:20px;padding:8px 12px;font-weight:900;color:#168bd0}
+.screen{display:none;min-height:calc(100dvh - 68px);padding-bottom:20px}
+.active{display:block}
+.hero{text-align:center;padding:22px 15px 20px}
+.logo{font-size:54px}
+.title{font-size:38px;font-weight:950}
+.sub{color:#6a8998;font-size:13px}
+.panel{margin:12px 15px;padding:15px;background:#fff;border:1px solid #a7e2f7;border-radius:17px;box-shadow:0 8px 25px #4ab6dc22}
+.primary,.btn{width:100%;border-radius:12px;padding:14px;font-weight:900;font-size:16px}
+.primary{border:0;background:linear-gradient(135deg,#5bd1ff,#168bd0);color:#fff}
+.btn{background:#eafaff;color:#17445d;border:1px solid #a9e1f5;margin-top:8px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:9px}
+.grid .btn{margin-top:0}
+.btn span{font-size:21px;display:block}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.stat{text-align:center;background:#eafaff;border-radius:10px;padding:9px}
+.stat b{font-size:17px}
+.stat small{display:block;font-size:9px;color:#7290a0}
+.bottom{display:flex;justify-content:space-around;padding:9px 10px 15px;color:#168bd0}
+.bottom div{text-align:center;font-size:11px}
+.bottom b{display:block;font-size:20px}
+h2{margin-top:5px}
+input{width:100%;padding:13px;border:1px solid #9bdcf4;border-radius:10px;margin:7px 0;font-size:16px}
+.back{background:#eafaff;color:#168bd0;border:1px solid #9bdcf4;padding:11px 15px;border-radius:10px;font-weight:800;margin-top:10px}
+.status{text-align:center;font-weight:800}
+.mp-status{padding:10px 12px;background:#eafaff;border:1px solid #a9e1f5;border-radius:10px;margin:8px 0;font-size:13px}
+
+/* ==================== NOVO ESTILO 3D PARA A MESA E PEÇAS ==================== */
+.board {
+  margin: 10px 15px;
+  height: 310px;
+  background: radial-gradient(circle at center, #2e7d32 0%, #1b5e20 70%, #0d3810 100%);
+  border: 12px solid #5d4037;
+  border-radius: 20px;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 10px 25px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  position: relative;
+}
+
+.chain {
+  display: flex;
+  gap: 8px;
+  min-width: max-content;
+  padding: 20px;
+}
+
+.tile {
+  width: 44px;
+  height: 80px;
+  background: linear-gradient(145deg, #ffffff 0%, #f0f0f0 60%, #e0e0e0 100%);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 3px 5px 10px rgba(0, 0, 0, 0.4), inset -1px -1px 2px rgba(0, 0, 0, 0.2), inset 1px 1px 2px rgba(255, 255, 255, 0.9);
+  flex-shrink: 0;
+  position: relative;
+  border: 1px solid #d0d0d0;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.half {
+  height: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.half:first-child::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  width: 80%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #888, transparent);
+  box-shadow: 0 1px 1px rgba(0,0,0,0.3);
+}
+
+.dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: radial-gradient(circle at 30% 30%, #333 0%, #000 80%);
+  border-radius: 50%;
+  box-shadow: inset 1px 1px 1px rgba(0,0,0,0.8), 0.5px 0.5px 1px rgba(255,255,255,0.8);
+}
+
+.hand {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  padding: 15px 15px 20px;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 12px;
+  margin: 0 15px;
+}
+
+.pieceWrap {
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.pieceWrap:active {
+  transform: scale(0.95);
+}
+
+.selected .tile {
+  transform: translateY(-12px) scale(1.05);
+  box-shadow: 0 12px 20px rgba(0,0,0,0.3), 0 0 0 3px #168bd0;
+}
+
+.actions {display:flex;gap:7px;padding:10px 15px 0}
+.actions button{flex:1;background:#168bd0;color:white;border:0;border-radius:10px;padding:12px;font-weight:900}
+.hint{text-align:center;color:#6a8998;font-size:12px;padding:5px 15px}
 </style>
 
 <link rel="manifest" href="manifest.json">
@@ -26,8 +152,8 @@
 <section id="ranking" class="screen"><div class="panel"><h2>🏆 Ranking</h2><p>Ranking local do protótipo.</p><p>Você — 0 pontos</p><p>Jogador Azul — 0 pontos</p><button class="back" onclick="home()">← Voltar</button></div></section>
 <section id="shop" class="screen"><div class="panel"><h2>🛍️ Loja</h2><p>🪙 <b id="shopCoins">1000</b> moedas</p><button class="btn" onclick="buy('Tema Azul',200)">🎨 Tema Azul — 200 🪙</button><button class="btn" onclick="buy('Avatar',300)">👤 Avatar — 300 🪙</button><button class="back" onclick="home()">← Voltar</button></div></section>
 <section id="settings" class="screen"><div class="panel"><h2>⚙️ Opções</h2><button class="btn" onclick="alert('Som alternado.')">🔊 Som</button><button class="btn" onclick="alert('Idioma: Português 🇧🇷')">🌎 Idioma</button><button class="back" onclick="home()">← Voltar</button></div></section>
-<section id="mpgame" class="screen"><div class="panel"><div class="status" id="mpGameStatus">Aguardando...</div><div id="mpRoomLabel" class="mp-status"></div></div><div class="board"><div class="chain" id="mpChain"></div></div><div class="hint">Toque em uma peça e escolha o lado.</div><div class="hand" id="mpHand"></div><div class="actions"><button onclick="mpPlay('left')">← Esquerda</button><button onclick="mpPlay('right')">Direita →</button></div><div class="actions" style="margin-top:7px"><button onclick="mpDraw()">Comprar</button><button onclick="mpPass()">Passar</button></div><button class="back" style="margin-left:15px" onclick="leaveMP()">Sair da sala</button></section>
-<section id="game" class="screen"><div class="panel"><div class="status" id="gameStatus">Sua vez</div></div><div class="board"><div class="chain" id="chain"></div></div><div class="hand" id="hand"></div><div class="actions"><button onclick="playCPU('left')">← Esquerda</button><button onclick="playCPU('right')">Direita →</button></div><button class="back" style="margin-left:15px" onclick="home()">Sair da partida</button></section>
+<section id="mpgame" class="screen"><div class="panel"><div class="status" id="mpGameStatus">Aguardando...</div><div id="mpRoomLabel" class="mp-status"></div></div><div class="board"><div class="chain" id="mpChain"></div></div><div class="hint">Toque em uma peça e escolha o lado.</div><div class="hand" id="mpHand"></div><div class="actions"><button onclick="mpPlay('left')">← Esquerda</button><button onclick="mpPlay('right')">Direita →</button></div><div class="actions"><button onclick="mpDraw()">Comprar</button><button onclick="mpPass()">Passar</button></div><button class="back" style="margin-left:15px;margin-bottom:15px" onclick="leaveMP()">Sair da sala</button></section>
+<section id="game" class="screen"><div class="panel"><div class="status" id="gameStatus">Sua vez</div></div><div class="board"><div class="chain" id="chain"></div></div><div class="hand" id="hand"></div><div class="actions"><button onclick="playCPU('left')">← Esquerda</button><button onclick="playCPU('right')">Direita →</button></div><button class="back" style="margin-left:15px;margin-bottom:15px" onclick="home()">Sair da partida</button></section>
 </div>
 <script>
 const SERVER_DEFAULT='https://domino-azul-server.onrender.com';
@@ -45,7 +171,7 @@ function makeDeck(){let d=[];for(let a=0;a<=6;a++)for(let b=a;b<=6;b++)d.push([a
 function can(t,l,r){return !chain.length||t[0]===l||t[1]===l||t[0]===r||t[1]===r}
 function orient(t,n){return t[0]===n?t:[t[1],t[0]]}
 function startCPU(){const d=makeDeck();hand=d.splice(0,7);cpu=d.splice(0,7);chain=[];selected=-1;turn='p';show('game');renderCPU()}
-function renderCPU(){document.getElementById('chain').innerHTML=chain.map(tile).join('');document.getElementById('hand').innerHTML=hand.map((t,i)=>`<div class="pieceWrap" onclick="selectCPU(${i})" class="${i===selected?'selected':''}">${tile(t)}</div>`).join('');document.querySelectorAll('#hand .pieceWrap').forEach((e,i)=>{if(i===selected)e.classList.add('selected')});document.getElementById('gameStatus').textContent=turn==='p'?'Sua vez — toque em uma peça':'CPU pensando...'}
+function renderCPU(){document.getElementById('chain').innerHTML=chain.map(tile).join('');document.getElementById('hand').innerHTML=hand.map((t,i)=>`<div class="pieceWrap ${i===selected?'selected':''}" onclick="selectCPU(${i})">${tile(t)}</div>`).join('');document.getElementById('gameStatus').textContent=turn==='p'?'Sua vez — toque em uma peça':'CPU pensando...'}
 function selectCPU(i){if(turn==='p'){selected=i;renderCPU()}}
 function playCPU(side){if(turn!=='p'||selected<0)return;const t=hand[selected],l=chain.length?chain[0][0]:null,r=chain.length?chain[chain.length-1][1]:null;if(chain.length&&!can(t,l,r)){alert('Essa peça não pode ser jogada.');return}if(!chain.length)chain=[t];else if(side==='left')chain.unshift(orient(t,l));else chain.push(orient(t,r));hand.splice(selected,1);selected=-1;if(!hand.length){wins++;games++;coins+=100;updateUI();alert('Você venceu! +100 🪙');home();return}turn='c';renderCPU();setTimeout(cpuMove,500)}
 function cpuMove(){if(turn!=='c')return;const l=chain.length?chain[0][0]:null,r=chain.length?chain[chain.length-1][1]:null;const i=cpu.findIndex(t=>!chain.length||can(t,l,r));if(i<0){turn='p';renderCPU();return}const t=cpu.splice(i,1)[0];if(!chain.length)chain=[t];else if(t[0]===r||t[1]===r)chain.push(orient(t,r));else chain.unshift(orient(t,l));if(!cpu.length){games++;coins=Math.max(0,coins-50);updateUI();alert('CPU venceu. -50 🪙');home();return}turn='p';renderCPU()}
